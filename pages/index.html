@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width,target-densitydpi=high-dpi,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <meta name="renderer" content="webkit"/>
+    <title>网易19届秋招</title>
+    <meta name="keywords" content="2019 秋季 招聘 秋招 网易"/>
+    <meta name="description" content="网易19届秋招"/>
+    <link rel="stylesheet" href="../assets/style/index.css">
+    <script type="text/javascript" src="../libs/mustache.min.js"></script>
+    <script type="text/javascript" src="../libs/axios.min.js"></script>
+    <script type="text/javascript" src="../common/helper.js"></script>
+</head>
+<body>
+  <!--内容容器，不能更改。-->
+  <div id="target" class="nest-target"><div class="loading"></div></div>
+  <!--content-->
+  <script id="template" type="text/html">
+    <section class="main">
+      <header>
+        <img src="../assets/img/header.png" alt="" width="100%">
+      </header>
+      <section class="wrap">
+        <div class="d-title">{{groupIntroTitle}}</div>
+        <div class="d-cont">{{groupIntroContent}}</div>
+        <div class="d-cont2">
+          <ul>
+            {{#groupIntroDetail}}<li>{{.}}</li>{{/groupIntroDetail}}
+          </ul>
+        </div>
+        <div class="d-cont2">{{groupIntroNote}}</div>
+      </section>
+      <section class="wrap">
+        <div class="d-title">已入群群员（{{groupMemberNum}}）</div>
+        <ul class="d-list">
+          {{#groupMemberAvatar}}
+           <li><img src="{{src}}" alt="" width="100%"></li>
+          {{/groupMemberAvatar}}
+        </ul>
+      </section>
+      <a href="./code.html" class="d-btn d-btn-mt">我要入群</a>
+    </section>
+  </script>
+<script>
+  // 页面配置项
+  const CONFIG = {
+    path: 'https://yesno.wtf/api', // 接口地址
+  };
+
+  const Mustache = window.Mustache;
+  const axios = window.axios;
+
+  window.onload = function () {
+    // 定义嵌套字段
+    let nestedData = {
+      groupIntroTitle: 'This is a test word!!!!!!!!!!',
+      groupIntroContent: '网易19届校招已经开启！每年网易校招流程大致：网申-网上笔试-性格测试-专业面-HR面-等五个环节。流程多、战线长、难度大！为此特意开启【网易19届秋招备战群】期待你的加入！',
+      groupIntroDetail: ['【入群福利】', '7月28日网易资深导师专业指导校招', '网易校招资讯及时更新', '笔试、面试超全秋招资料全面共享', '专业的交流空间助你涨姿势'],
+      groupIntroNote: '点击下方[我要入群]，即可参与活动',
+      groupMemberNum: 200,
+      groupMemberAvatar: [
+        { id: '1', src: '../assets/img/photo1.jpg' },
+        { id: '2', src: '../assets/img/photo2.jpg' },
+        { id: '3', src: '../assets/img/photo3.jpg' },
+        { id: '4', src: '../assets/img/photo4.jpg' },
+        { id: '5', src: '../assets/img/photo5.jpg' },
+        { id: '6', src: '../assets/img/photo6.jpg' },
+        { id: '7', src: '../assets/img/photo7.jpg' },
+        { id: '8', src: '../assets/img/photo8.jpg' },
+      ]
+    };
+
+    // 获取URL参数
+    const query = getUrlParam();
+
+    // 请求接口数据，根据接口返回值修改嵌套字段数据
+    getData(CONFIG.path, query).then(res => {
+      // 修改嵌套字段数据
+      nestedData.groupIntroTitle = '群介绍';
+    }).finally(() => {
+      // 插入数据
+      insertData(nestedData)
+    }).catch(e => {
+      alert('网络错误，请稍后重试');
+    });
+  }
+</script>
+</body>
+</html>

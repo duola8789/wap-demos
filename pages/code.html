@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width,target-densitydpi=high-dpi,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <meta name="renderer" content="webkit"/>
+    <title>网易19届秋招</title>
+    <meta name="keywords" content="2019 秋季 招聘 秋招 网易"/>
+    <meta name="description" content="网易19届秋招"/>
+    <link rel="stylesheet" href="../assets/style/index.css">
+    <script type="text/javascript" src="../libs/mustache.min.js"></script>
+    <script type="text/javascript" src="../libs/axios.min.js"></script>
+    <script type="text/javascript" src="../common/helper.js"></script>
+</head>
+<body>
+  <!--内容容器，不能更改。-->
+  <div id="target" class="nest-target"><div class="loading"></div></div>
+  <!--content-->
+  <script id="template" type="text/html">
+    <section class="main">
+      <section class="wrap">
+        <div class="code"><img src="{{qrcode}}" alt=""></div>
+
+        <div class="d-tip1">入群只差一步，长按二维码入群</div>
+      </section>
+      <section class="wrap">
+        <div class="d-title">已入群群员（{{groupMemberNum}}）</div>
+        <ul class="d-list">
+          {{#groupMemberAvatar}}
+           <li><img src="{{src}}" alt="" width="100%"></li>
+          {{/groupMemberAvatar}}
+        </ul>
+      </section>
+      <a href="./index.html" class="d-btn d-btn-mt">返回</a>
+    </section>
+  </script>
+<script>
+  // 页面配置项
+  const CONFIG = {
+    path: 'https://yesno.wtf/api', // 接口地址
+  };
+
+  const Mustache = window.Mustache;
+  const axios = window.axios;
+
+  /**
+   * 向文档中插入数据
+   * @param data：定义好的嵌套字段
+   */
+  function insertData(data) {
+    // 插入数据
+    const template = document.querySelector('#template').innerHTML;
+    document.querySelector('#target').innerHTML = Mustache.render(template, data);
+  }
+
+  window.onload = function () {
+    // 定义嵌套字段
+    let nestedData = {
+      qrcode: '',
+      groupMemberNum: 0,
+      groupMemberAvatar: []
+    };
+
+    // 获取URL参数
+    const query = getUrlParam('//api.imjad.cn/cloudmusic/?type=song&id=28012031');
+
+    // 请求接口数据，根据接口返回值修改嵌套字段数据
+    getData(CONFIG.path, query).then(res => {
+      // 修改嵌套字段数据
+      nestedData.qrcode = 'http://wx.mall.163.com/chatgroup/qrcode?themeId=default';
+      nestedData.groupMemberNum = 200;
+      nestedData.groupMemberAvatar = [
+        { id: '1', src: '../assets/img/photo1.jpg' },
+        { id: '2', src: '../assets/img/photo2.jpg' },
+        { id: '3', src: '../assets/img/photo3.jpg' },
+        { id: '4', src: '../assets/img/photo4.jpg' },
+        { id: '5', src: '../assets/img/photo5.jpg' },
+        { id: '6', src: '../assets/img/photo6.jpg' },
+        { id: '7', src: '../assets/img/photo7.jpg' },
+        { id: '8', src: '../assets/img/photo8.jpg' },
+      ];
+    }).finally(() => {
+      // 插入数据
+      insertData(nestedData)
+    }).catch(e => {
+      alert('网络错误，请稍后重试')
+    });
+  }
+</script>
+</body>
+</html>
